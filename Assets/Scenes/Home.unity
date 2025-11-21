@@ -1642,7 +1642,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &538768756
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11391,7 +11391,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 133
+    PropertyRectY: 130
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -11470,7 +11470,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 155
+    PropertyRectY: 152
     SequenceType: 2
     EaseType: 3
     EasePower: 3
@@ -11549,7 +11549,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 177
+    PropertyRectY: 174
     SequenceType: 0
     EaseType: 0
     EasePower: 2
@@ -11628,7 +11628,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 199
+    PropertyRectY: 196
     SequenceType: 1
     EaseType: 3
     EasePower: 3
@@ -11707,7 +11707,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 221
+    PropertyRectY: 218
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -11786,7 +11786,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 243
+    PropertyRectY: 240
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -11865,7 +11865,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 265
+    PropertyRectY: 262
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -11944,7 +11944,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 287
+    PropertyRectY: 284
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -12023,7 +12023,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 309
+    PropertyRectY: 306
     SequenceType: 4
     EaseType: 2
     EasePower: 3
@@ -12102,7 +12102,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 331
+    PropertyRectY: 328
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -12181,7 +12181,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 353
+    PropertyRectY: 350
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -12260,7 +12260,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 375
+    PropertyRectY: 372
     SequenceType: 4
     EaseType: 2
     EasePower: 3
@@ -12339,7 +12339,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 397
+    PropertyRectY: 394
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -12418,7 +12418,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 419
+    PropertyRectY: 416
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -12497,7 +12497,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 441
+    PropertyRectY: 438
     SequenceType: 4
     EaseType: 2
     EasePower: 3
@@ -12576,7 +12576,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 463
+    PropertyRectY: 460
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -12655,7 +12655,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 485
+    PropertyRectY: 482
     SequenceType: 4
     EaseType: 2
     EasePower: 3
@@ -12734,7 +12734,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 507
+    PropertyRectY: 504
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -12813,7 +12813,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 529
+    PropertyRectY: 526
     SequenceType: 0
     EaseType: 2
     EasePower: 1
@@ -12892,7 +12892,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 551
+    PropertyRectY: 548
     SequenceType: 0
     EaseType: 2
     EasePower: 1
@@ -12971,7 +12971,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 573
+    PropertyRectY: 570
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -13050,7 +13050,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 595
+    PropertyRectY: 592
     SequenceType: 0
     EaseType: 2
     EasePower: 2
@@ -13129,7 +13129,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 617
+    PropertyRectY: 614
     SequenceType: 0
     EaseType: 2
     EasePower: 2
@@ -13208,7 +13208,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 639
+    PropertyRectY: 636
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -13287,7 +13287,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 661
+    PropertyRectY: 658
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -13366,7 +13366,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 683
+    PropertyRectY: 680
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -13445,7 +13445,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 705
+    PropertyRectY: 702
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -13524,7 +13524,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 727
+    PropertyRectY: 724
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -13603,7 +13603,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 749
+    PropertyRectY: 746
     SequenceType: 0
     EaseType: 2
     EasePower: 3
@@ -13682,7 +13682,7 @@ MonoBehaviour:
     TriggerStart: 0
     TriggerEnd: 0
     PropertyRectHeight: 20
-    PropertyRectY: 771
+    PropertyRectY: 768
     SequenceType: 1
     EaseType: 2
     EasePower: 3
@@ -13756,12 +13756,12 @@ MonoBehaviour:
     MaxVisibleCharactersState: 0
     MaxVisibleCharactersStart: 0
     MaxVisibleCharactersEnd: 0
-  - AtTime: 'At 1.61s [Level1] [LoadScene]'
+  - AtTime: 'At 1.61s [Stage] [LoadScene]'
     StartTime: 1.6100001
     TriggerStart: 0
     TriggerEnd: 0
-    PropertyRectHeight: 20
-    PropertyRectY: 793
+    PropertyRectHeight: 60
+    PropertyRectY: 790
     SequenceType: 5
     EaseType: 2
     EasePower: 3
@@ -13771,14 +13771,14 @@ MonoBehaviour:
     EventDynamic:
       m_PersistentCalls:
         m_Calls: []
-    IsUnfolded: 0
+    IsUnfolded: 1
     IsDone: 1
     Target: {fileID: 0}
     IsActivating: 0
     PlaySFXBy: 0
     SFXFile: {fileID: 0}
     SFXIndex: 0
-    SceneToLoad: Level1
+    SceneToLoad: Stage
     Event:
       m_PersistentCalls:
         m_Calls: []
@@ -14407,8 +14407,6 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -14430,7 +14428,6 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -20809,7 +20806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1715748827
 RectTransform:
   m_ObjectHideFlags: 0

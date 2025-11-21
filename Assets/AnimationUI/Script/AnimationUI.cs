@@ -74,10 +74,19 @@ public class AnimationUI : MonoBehaviour
 
     List<Coroutine> _coroutines = new List<Coroutine>();
     [ContextMenu("Stop Animation")]
+    [ContextMenu("Stop Animation")]
     public void Stop()
     {
-        foreach(Coroutine coroutine in _coroutines)StopCoroutine(coroutine);
-        _coroutines.Clear();
+        if (_coroutines != null)
+        {
+            foreach (Coroutine coroutine in _coroutines)
+            {
+                // 코루틴이 null이 아닐 때만 StopCoroutine 호출
+                if (coroutine != null) 
+                    StopCoroutine(coroutine);
+            }
+            _coroutines.Clear();
+        }
     }
 
     IEnumerator PlayAnimation()
