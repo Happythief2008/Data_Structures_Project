@@ -6,40 +6,44 @@ using DhafinFawwaz.AnimationUILib;
 using System.Linq; 
 using System; 
 
-// (GameResultHistory, GameHistory 구조체가 이 위에 정의되어 있다고 가정)
 
 public class GameManager : MonoBehaviour
 {
     [Header("Game Settings")]
-    public List<QuestionData> questions; 
+    public List<QuestionData> questions; // 이거 랜덤하게 뽑히도록 바뀜
+    [Tooltip("질문을 시작 전에 섞을지 여부")] public bool shuffleQuestions = true;
+    [Tooltip("0 이면 전체 사용, 0보다 크면 섞은 뒤 최대 개수만큼 사용")]
+    public int maxQuestions = 0; 
     public float totalGameTimeLimit = 60.0f; 
 
     [Header("Animations")]
     public AnimationUI nextQuizAnim;
-    public AnimationUI resultAnim;
-
+    public AnimationUI resultAnim; 
     [Header("References")]
     public UIManager uiManager;
 
-    // 내부 상태 변수들
     private int currentQuestionIndex = 0;
     private int score = 0;
     private int correctCount = 0;
-    
     private float remainingTotalTime;
     private float questionStartTime;
-    
     private bool isGameActive = false;
     private bool isProcessingAnswer = false;
-    
-    // (이전에 사용된 gameResult 객체는 현재 JSON History 저장에 필요하지 않으므로 사용하지 않습니다.)
 
     private void Start()
     {
         uiManager.Init(this);
-        
+
+        // 질문 리스트를 섞고 필요하면 일부만 사용하도록 처리
+        if (questions == null) questions = new List<QuestionData>();
+
+        if (shuffleQuestions && questions.Count > 1)
+            ShuffleQuestions();
+
+        if (maxQuestions > 0 && maxQuestions < questions.Count)
+            questions = questions.Take(maxQuestions).ToList();
+
         remainingTotalTime = totalGameTimeLimit;
-        
         isGameActive = true;
         questionStartTime = Time.time; 
 
@@ -70,7 +74,6 @@ public class GameManager : MonoBehaviour
 
         if (currentQuestionIndex < questions.Count)
         {
-            uiManager.UpdateProgressUI(correctCount, questions.Count);
             uiManager.SetQuestionUI(questions[currentQuestionIndex]);
         }
         else
@@ -105,7 +108,6 @@ public class GameManager : MonoBehaviour
             Debug.Log($"오답! (소요 시간: {timeSpentOnThisQuestion:F2}초)");
         }
 
-        uiManager.UpdateProgressUI(correctCount, questions.Count);
 
         StartCoroutine(ProcessTransition());
     }
@@ -118,18 +120,27 @@ public class GameManager : MonoBehaviour
 
         currentQuestionIndex++;
 
-        if (nextQuizAnim != null)
+        bool isLastQuestion = currentQuestionIndex >= questions.Count;
+
+        if (isLastQuestion)
         {
-            nextQuizAnim.OnAnimationEnded = () => 
+            EndGame();
+        }
+        else 
+        {
+            if (nextQuizAnim != null)
+            {
+                nextQuizAnim.OnAnimationEnded = () => 
+                {
+                    LoadQuestion();
+                    nextQuizAnim.OnAnimationEnded = null; 
+                };
+                nextQuizAnim.Play();
+            }
+            else
             {
                 LoadQuestion();
-                nextQuizAnim.OnAnimationEnded = null; 
-            };
-            nextQuizAnim.Play();
-        }
-        else
-        {
-            LoadQuestion();
+            }
         }
     }
 
@@ -138,25 +149,22 @@ public class GameManager : MonoBehaviour
         if (!isGameActive) return;
         isGameActive = false;
 
-        // 실제 소요 시간 계산
         float timeTaken = totalGameTimeLimit - remainingTotalTime;
 
         Debug.Log("게임 종료! 최종 점수: " + score);
         
-        // 새로운 JSON 형식에 맞춰 저장 함수 호출
         SaveResultToHistoryJson(timeTaken);
 
         uiManager.ShowGameOverUI(score);
-        if (resultAnim != null) resultAnim.Play();
+        
+        if (resultAnim != null) resultAnim.Play(); 
     }
 
-    // ★★★ JSON History 저장 함수 ★★★
+    // JSON History 저장 함수
     private void SaveResultToHistoryJson(float timeTaken)
     {
-        // 1. 기존 기록 불러오기
         GameHistory history = LoadExistingHistory();
 
-        // 2. 현재 게임 결과 생성 (영어 속성명 사용)
         GameResult newResult = new GameResult
         {
             playDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 
@@ -164,10 +172,9 @@ public class GameManager : MonoBehaviour
             totalTime = timeTaken
         };
         
-        // 3. 리스트에 추가
         history.results.Add(newResult);
 
-        // 4. 업데이트된 리스트를 JSON 파일로 저장
+        // 업데이트된 리스트를 JSON 파일로 저장
         string json = JsonUtility.ToJson(history, true);
         string path = Path.Combine(Application.persistentDataPath, "quizHistory.json"); 
         
@@ -182,7 +189,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    // JSON History 불러오기 헬퍼 함수 (영어 속성명 사용)
+    // JSON History 불러오기 헬퍼 함수
     private GameHistory LoadExistingHistory()
     {
         string path = Path.Combine(Application.persistentDataPath, "quizHistory.json");
@@ -203,5 +210,22 @@ public class GameManager : MonoBehaviour
             }
         }
         return new GameHistory();
+    }
+
+    // Fisher-Yates 섞기
+    private void ShuffleQuestions()
+    {
+        if (questions == null || questions.Count <= 1) return;
+
+        var rng = new System.Random();
+        int n = questions.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            var tmp = questions[k];
+            questions[k] = questions[n];
+            questions[n] = tmp;
+        }
     }
 }

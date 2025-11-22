@@ -10,8 +10,8 @@ public class UIManager : MonoBehaviour
     public AnswerButton[] answerButtons;
     
     [Header("New UI")]
-    public TextMeshProUGUI timerText;    // 남은 시간 표시 (예: "10.5s")
-    public TextMeshProUGUI progressText; // 진행 상황 표시 (예: "정답: 2/10")
+    public TextMeshProUGUI timerText;    
+    public TextMeshProUGUI progressText; 
 
     private GameManager gameManager;
 
@@ -52,14 +52,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // 타이머 UI 갱신
     public void UpdateTimerUI(float time)
     {
         if (timerText != null)
             timerText.text = $"Time: {time:F1}s";
     }
 
-    // 진행 상황(점수) UI 갱신
     public void UpdateProgressUI(int currentCorrect, int totalQuestions)
     {
         if (progressText != null)
@@ -68,8 +66,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowGameOverUI(int finalScore)
     {
-        if (questionText != null) questionText.text = "Score : " + finalScore;
-        if (questionImageDisplay != null) questionImageDisplay.gameObject.SetActive(false);
+        if (questionText != null) progressText.text = "Score : " + finalScore;
         if (timerText != null) timerText.text = "";
     }
 }
