@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
 
-[Serializable]
+[System.Serializable]
 public class GameResult
 {
-    public string playDate;      // 플레이 날짜
-    public int totalScore;       // 최종 점수
-    public int correctCount;     // 맞춘 개수
-    public List<QuestionRecord> records = new List<QuestionRecord>(); // 문제별 기록 리스트
+    public string playDate;      
+    public int correctCount;     
+    public float totalTime;      
+    // (QuizManager의 questionsPerGame 변수를 직접 참조할 수 없으므로, 기본값 10을 사용하거나 History에 totalQuestions를 추가해야 합니다. 여기서는 편의상 10을 사용합니다.)
 }
-
-[Serializable]
-public class QuestionRecord
+[System.Serializable]
+public class GameHistory
 {
-    public string questionText;  // 문제 내용
-    public bool isCorrect;       // 정답 여부
-    public float timeTaken;      // 푸는데 걸린 시간 (초)
+    public List<GameResult> results = new List<GameResult>();
 }
+// -------

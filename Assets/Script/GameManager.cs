@@ -1,14 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using System.IO; // 파일 저장을 위해 필요
+using System.IO;
 using DhafinFawwaz.AnimationUILib;
+using System.Linq; 
+using System; 
+
+// (GameResultHistory, GameHistory 구조체가 이 위에 정의되어 있다고 가정)
 
 public class GameManager : MonoBehaviour
 {
     [Header("Game Settings")]
     public List<QuestionData> questions; 
-    public float timeLimitPerQuestion = 10.0f; // 문제당 제한 시간
+    public float totalGameTimeLimit = 60.0f; 
 
     [Header("Animations")]
     public AnimationUI nextQuizAnim;
@@ -20,33 +24,41 @@ public class GameManager : MonoBehaviour
     // 내부 상태 변수들
     private int currentQuestionIndex = 0;
     private int score = 0;
-    private int correctCount = 0; // 맞춘 문제 수 추적
-    private float currentTimer;
-    private bool isTimerRunning = false;
+    private int correctCount = 0;
+    
+    private float remainingTotalTime;
+    private float questionStartTime;
+    
+    private bool isGameActive = false;
     private bool isProcessingAnswer = false;
-
-    // 결과 저장용 데이터
-    private GameResult gameResult = new GameResult();
+    
+    // (이전에 사용된 gameResult 객체는 현재 JSON History 저장에 필요하지 않으므로 사용하지 않습니다.)
 
     private void Start()
     {
-        uiManager.Init(this); // UIManager 초기화
-        gameResult.playDate = System.DateTime.Now.ToString(); // 게임 시작 시간 기록
+        uiManager.Init(this);
+        
+        remainingTotalTime = totalGameTimeLimit;
+        
+        isGameActive = true;
+        questionStartTime = Time.time; 
+
         LoadQuestion();
     }
 
     private void Update()
     {
-        // 타이머 로직
-        if (isTimerRunning && !isProcessingAnswer)
+        if (isGameActive && !isProcessingAnswer)
         {
-            currentTimer -= Time.deltaTime;
-            uiManager.UpdateTimerUI(currentTimer);
+            remainingTotalTime -= Time.deltaTime;
+            uiManager.UpdateTimerUI(remainingTotalTime);
 
-            if (currentTimer <= 0)
+            if (remainingTotalTime <= 0)
             {
-                // 시간 초과! 오답 처리 (-1은 오답을 의미하는 임의의 값)
-                HandleAnswer(-1); 
+                remainingTotalTime = 0;
+                uiManager.UpdateTimerUI(0);
+                Debug.Log("전체 시간 종료!");
+                EndGame(); 
             }
         }
     }
@@ -54,14 +66,10 @@ public class GameManager : MonoBehaviour
     public void LoadQuestion()
     {
         isProcessingAnswer = false;
-        
+        questionStartTime = Time.time; 
+
         if (currentQuestionIndex < questions.Count)
         {
-            // 타이머 리셋
-            currentTimer = timeLimitPerQuestion;
-            isTimerRunning = true;
-
-            // UI 갱신 (현재 맞춘 개수 / 전체 문제 수)
             uiManager.UpdateProgressUI(correctCount, questions.Count);
             uiManager.SetQuestionUI(questions[currentQuestionIndex]);
         }
@@ -71,57 +79,42 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 버튼 클릭 시 호출됨
     public void AnswerClicked(int selectedIndex)
     {
-        if (isProcessingAnswer) return;
+        if (!isGameActive || isProcessingAnswer) return;
         HandleAnswer(selectedIndex);
     }
 
-    // 정답 처리 및 데이터 기록 로직
     private void HandleAnswer(int selectedIndex)
     {
         isProcessingAnswer = true;
-        isTimerRunning = false; // 타이머 정지
 
         QuestionData currentQ = questions[currentQuestionIndex];
         bool isCorrect = (selectedIndex == currentQ.correctAnswerIndex);
         
-        // 소요 시간 계산 (제한시간 - 남은시간)
-        float timeTaken = timeLimitPerQuestion - currentTimer;
-        if (timeTaken < 0) timeTaken = timeLimitPerQuestion; // 0초 이하 방지
-
-        // 1. 결과 데이터 기록 (JSON 저장용)
-        QuestionRecord record = new QuestionRecord
-        {
-            questionText = currentQ.questionText,
-            isCorrect = isCorrect,
-            timeTaken = timeTaken
-        };
-        gameResult.records.Add(record);
-
-        // 2. 점수 및 정답 카운트 처리
+        float timeSpentOnThisQuestion = Time.time - questionStartTime;
+        
         if (isCorrect)
         {
             score += 10;
             correctCount++;
-            Debug.Log($"정답! ({timeTaken:F2}초 소요)");
+            Debug.Log($"정답! (소요 시간: {timeSpentOnThisQuestion:F2}초)");
         }
         else
         {
-            Debug.Log($"오답/시간초과! ({timeTaken:F2}초 소요)");
+            Debug.Log($"오답! (소요 시간: {timeSpentOnThisQuestion:F2}초)");
         }
 
-        // UI 즉시 갱신 (정답 수 올라가는 것 보여주기)
         uiManager.UpdateProgressUI(correctCount, questions.Count);
 
-        // 3. 다음 단계로 이동 (코루틴)
         StartCoroutine(ProcessTransition());
     }
 
     IEnumerator ProcessTransition()
     {
         yield return new WaitForSeconds(1.0f);
+
+        if (!isGameActive) yield break;
 
         currentQuestionIndex++;
 
@@ -142,31 +135,73 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
+        if (!isGameActive) return;
+        isGameActive = false;
+
+        // 실제 소요 시간 계산
+        float timeTaken = totalGameTimeLimit - remainingTotalTime;
+
         Debug.Log("게임 종료! 최종 점수: " + score);
         
-        // 결과 데이터 마무리
-        gameResult.totalScore = score;
-        gameResult.correctCount = correctCount;
-
-        // JSON 저장
-        SaveResultToJson();
+        // 새로운 JSON 형식에 맞춰 저장 함수 호출
+        SaveResultToHistoryJson(timeTaken);
 
         uiManager.ShowGameOverUI(score);
         if (resultAnim != null) resultAnim.Play();
     }
 
-    // ★ JSON 저장 함수
-    private void SaveResultToJson()
+    // ★★★ JSON History 저장 함수 ★★★
+    private void SaveResultToHistoryJson(float timeTaken)
     {
-        // 1. 클래스를 JSON 문자열로 변환
-        string json = JsonUtility.ToJson(gameResult, true); // true는 사람이 읽기 좋게 줄바꿈
+        // 1. 기존 기록 불러오기
+        GameHistory history = LoadExistingHistory();
 
-        // 2. 저장 경로 설정 (PC, 모바일 모두 작동하는 경로)
-        string path = Path.Combine(Application.persistentDataPath, "GameResult.json");
+        // 2. 현재 게임 결과 생성 (영어 속성명 사용)
+        GameResult newResult = new GameResult
+        {
+            playDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), 
+            correctCount = correctCount,
+            totalTime = timeTaken
+        };
+        
+        // 3. 리스트에 추가
+        history.results.Add(newResult);
 
-        // 3. 파일 쓰기
-        File.WriteAllText(path, json);
-
-        Debug.Log("결과 저장 완료: " + path);
+        // 4. 업데이트된 리스트를 JSON 파일로 저장
+        string json = JsonUtility.ToJson(history, true);
+        string path = Path.Combine(Application.persistentDataPath, "quizHistory.json"); 
+        
+        try
+        {
+            File.WriteAllText(path, json);
+            Debug.Log($"게임 결과 기록 저장 완료: {path}. 정답: {newResult.correctCount}, 시간: {newResult.totalTime:F2}초");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"게임 결과 저장 실패: {e.Message}");
+        }
+    }
+    
+    // JSON History 불러오기 헬퍼 함수 (영어 속성명 사용)
+    private GameHistory LoadExistingHistory()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "quizHistory.json");
+        
+        if (File.Exists(path))
+        {
+            try
+            {
+                string json = File.ReadAllText(path);
+                if (string.IsNullOrWhiteSpace(json)) return new GameHistory();
+                
+                return JsonUtility.FromJson<GameHistory>(json);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"기존 기록 불러오기 실패 (파일 형식 오류?): {e.Message}. 새 기록으로 시작합니다.");
+                return new GameHistory(); 
+            }
+        }
+        return new GameHistory();
     }
 }

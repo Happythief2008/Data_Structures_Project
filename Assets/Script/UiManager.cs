@@ -63,12 +63,12 @@ public class UIManager : MonoBehaviour
     public void UpdateProgressUI(int currentCorrect, int totalQuestions)
     {
         if (progressText != null)
-            progressText.text = $"정답: {currentCorrect} / {totalQuestions}";
+            progressText.text = $"Progress: {currentCorrect} / {totalQuestions}";
     }
 
     public void ShowGameOverUI(int finalScore)
     {
-        if (questionText != null) questionText.text = "게임 종료! 최종 점수: " + finalScore;
+        if (questionText != null) questionText.text = "Score : " + finalScore;
         if (questionImageDisplay != null) questionImageDisplay.gameObject.SetActive(false);
         if (timerText != null) timerText.text = "";
     }

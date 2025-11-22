@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: TestQuiz
   m_EditorClassIdentifier: 
   questionText: Testing
+  questionImage: {fileID: -1935083779452269832, guid: 44a1c4710310b423ea39f992124dccc4, type: 3}
   answers:
   - Bubble Sort
   - Quick Sort
   - Merge Sort
   - Select Sort
-  correctAnswerIndex: 2
-  questionImage: {fileID: 0}
+  correctAnswerIndex: 1
